@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/T10
+/TemporaryAspFiles/T10
+/Solution.bat
+/T10.sln
+/folder.lnk
+/Solution.lnk
