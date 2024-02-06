@@ -1,15 +1,35 @@
 <template>
+	<qp-shinking-panel id="filterForm">
+		<div id="EmissionType_header" wg-container class="h-stack">
+			<div class="h-stack gray-pane col-sm-12 col-md-7 col-lg-9">
+				<qp-fieldset id="first" view.bind="Emission" class="col-sm-12 col-md-12 col-lg-5">
+					<field name="EmissionCD"></field>
+					<field name="Source"></field>
+					<field name="UnitType"></field>
+					<field name="RegionName"></field>
+					<field name="Year"></field>
+				</qp-fieldset>
+			</div>
+		</div>
+	</qp-shinking-panel>
+
 	<qp-tabbar class="stretch" active-tab-id="tabGeneralSettings" id="mainTab">
-		<qp-tab id="tabGeneralSettings" header.bind="TabHeaders.GeneralSettings" class="stretch">
-			<qp-fieldset id="setups" view.bind="Preferences"
+		<qp-tab id="tabGeneralSettings" caption="General" class="stretch">
+			<qp-fieldset id="gen" view.bind="CurrentEmission"
 						 class="col-sm-12 col-md-6 col-lg-4">
-				<field name="ExtConsignPOAccrualAcctID"></field>
-				<field name="IntConsignPOAccrualAcctID"></field>
-				<field name="InternalCustomerClassID"></field>
-				<field name="InternalIMMClassID"></field>
-				<field name="BuyerRoleName"></field>
-				<field name="ForceUpdateBaseCost"></field>
+				<field name="Name"></field>
+				<field name="ActivityID"></field>
+				<field name="Category"></field>
+				<field name="Sector"></field>
+				<field name="Description"></field>
+				<field name="Unit"></field>
+				<field name="Co2e"></field>
+				<field name="Co2eUnit"></field>
 			</qp-fieldset>
+		</qp-tab>
+		<qp-tab id="tabTransactions" caption="Transactions" class="stretch">
+			<qp-grid id="grid1" view.bind="Transaction" class="stretch">
+			</qp-grid>
 		</qp-tab>
 	</qp-tabbar>
 </template>

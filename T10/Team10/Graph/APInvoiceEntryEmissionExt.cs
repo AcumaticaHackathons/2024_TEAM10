@@ -2,6 +2,7 @@
 using PX.Data.BQL.Fluent;
 using PX.Objects.AP;
 using PX.Objects.CN.Common.Extensions;
+using PX.Objects.CN.Compliance.PO.CacheExtensions;
 using PX.Objects.Common.GraphExtensions.Abstract.DAC;
 using PX.Objects.IN;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PX.Data.BQL.BqlPlaceholder;
 using static PX.Objects.AR.ARDocumentEnq;
 
 namespace Team10
@@ -36,22 +38,72 @@ namespace Team10
             }
         }
 
-        protected virtual void _(Events.RowPersisting<APTran> e)
+        //protected virtual void _(Events.RowPersisting<APTran> e, PXRowPersisting baseEvent)
+        //{
+        //    if (baseEvent != null) baseEvent.Invoke(e.Cache, e.Args);
+
+        //    APTran row = e.Row;
+        //    APTranEmissionExt rowExt = row.GetExtension<APTranEmissionExt>();
+
+        //    if (rowExt.UsrEmissionID != null && Base.Document.Current.Status == APDocStatus.Balanced)
+        //    {
+        //        EmissionTran item = (EmissionTran)EmissionTrans.Cache.CreateInstance();
+
+        //        //item.EmissionID = e.Row.GetExtension<APTranEmissionExt>().UsrEmissionID;
+        //        item.EmissionID = rowExt.UsrEmissionID;
+        //        item.RefNbr = row.RefNbr;
+        //        item.LineNbr = row.LineNbr;
+        //        item.InventoryID = row.InventoryID;
+        //        item.Qty = row.Qty;
+        //        item.EmissionValue = rowExt.UsrExtEmissionValue;
+        //        item.ExtEmissionValue = rowExt.UsrExtEmissionValue;
+
+        //        EmissionTrans.Cache.Insert(item);
+        //    }
+        //}
+
+        #region PersistDelegate
+        public delegate void PersistDelegate();
+        [PXOverride]
+        public void Persist(PersistDelegate baseMethod)
         {
-            if (Base.Document.Current.Status == APDocStatus.Balanced)
+
+            if (baseMethod != null) baseMethod();
+
+            if(Base.Document.Current.Status == APDocStatus.Balanced)
             {
-                EmissionTran item = (EmissionTran)EmissionTrans.Cache.CreateInstance();
+                EmissionTypeMaint graph = PXGraph.CreateInstance<EmissionTypeMaint>();
 
-                item.EmissionID = e.Row.GetExtension<APTranEmissionExt>().UsrEmissionID;
-                item.RefNbr = e.Row.RefNbr;
-                item.LineNbr = e.Row.LineNbr;
-                item.InventoryID = e.Row.InventoryID;
-                item.Qty = e.Row.Qty;
-                item.EmissionValue = e.Row.GetExtension<APTranEmissionExt>().UsrExtEmissionValue;
-                item.ExtEmissionValue = e.Row.GetExtension<APTranEmissionExt>().UsrExtEmissionValue;
+                foreach (APTran row in Base.Transactions.Select())
+                {
+                    APTranEmissionExt rowExt = row.GetExtension<APTranEmissionExt>();
 
-                EmissionTrans.Cache.Insert(item);
+                    if (rowExt.UsrEmissionID != null && Base.Document.Current.Status == APDocStatus.Balanced)
+                    {
+                        graph.Clear();
+                        graph.Emission.Current = graph.Emission.Search<EmissionType.emissionID>(rowExt.UsrEmissionID);
+
+                        //EmissionTran item = (EmissionTran)EmissionTrans.Cache.CreateInstance();
+                        EmissionTran item = new EmissionTran();
+
+                        //item.EmissionID = e.Row.GetExtension<APTranEmissionExt>().UsrEmissionID;
+                        item.EmissionID = rowExt.UsrEmissionID;
+                        item.RefNbr = row.RefNbr;
+                        item.LineNbr = row.LineNbr;
+                        item.InventoryID = row.InventoryID;
+                        item.Qty = row.Qty;
+                        item.EmissionValue = rowExt.UsrExtEmissionValue;
+                        item.ExtEmissionValue = rowExt.UsrExtEmissionValue;
+
+                        graph.Transaction.Insert(item);
+                        graph.Save.Press();
+
+                    }
+                }
             }
+            
         }
+        #endregion
+
     }
 }

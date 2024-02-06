@@ -1,24 +1,33 @@
 import {
-	ScreenBaseViewModel,
-	createInstance,
+	PXScreen,
+	createSingle,
+	createCollection,
 	graphInfo,
-	localizable
+	localizable,
+	PXActionState
 } from 'client-controls';
 
 import {
-	SSPOSetup
+	EmissionType,
+	EmissionTran
 } from './views';
 
 @localizable
 class TabHeaders {
-	static GeneralSettings = "General Settings";
+	static GeneralSettings = "General";
+	static Transactions = "Transactions"
 }
 
-@graphInfo({ graphType: 'SSCS.PO.SSPOSetupMaint', primaryView: 'Preferences' })
-export class SS105000 extends ScreenBaseViewModel {
+@graphInfo({ graphType: 'Team10.EmissionTypeMaint', primaryView: 'Emission' })
+export class CUST2010 extends PXScreen {
+	
 	TabHeaders = TabHeaders;
 
-	Preferences = createInstance(SSPOSetup);
+	MakeApi: PXActionState;
+
+	Emission = createSingle(EmissionType);
+	CurrentEmission = createSingle(EmissionType);
+	Transaction = createCollection(EmissionTran);
 
 }
 

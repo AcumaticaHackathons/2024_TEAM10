@@ -1,0 +1,6 @@
+﻿c:\windows\system32\inetsrv> "C:\Projects\T10\Customization\T10\T10Validation\T10Website\bin\roslyn\csc.exe" /shared /keepalive:"10" /noconfig  /fullpaths @"C:\Projects\T10\Customization\T10\Temp\696ce20f00f04f6e9d293f43e02eb8d2\zxioyerg.cmdline"
+
+
+Microsoft (R) Visual C# Compiler version 2.9.0.63208 (958f2354)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
