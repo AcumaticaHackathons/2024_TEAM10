@@ -1,0 +1,15 @@
+<template>
+	<qp-tabbar class="stretch" active-tab-id="tabGeneralSettings" id="mainTab">
+		<qp-tab id="tabGeneralSettings" header.bind="TabHeaders.GeneralSettings" class="stretch">
+			<qp-fieldset id="setups" view.bind="Preferences"
+						 class="col-sm-12 col-md-6 col-lg-4">
+				<field name="ExtConsignPOAccrualAcctID"></field>
+				<field name="IntConsignPOAccrualAcctID"></field>
+				<field name="InternalCustomerClassID"></field>
+				<field name="InternalIMMClassID"></field>
+				<field name="BuyerRoleName"></field>
+				<field name="ForceUpdateBaseCost"></field>
+			</qp-fieldset>
+		</qp-tab>
+	</qp-tabbar>
+</template>
